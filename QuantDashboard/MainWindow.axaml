@@ -1,0 +1,261 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:QuantDashboard"
+        x:Class="QuantDashboard.MainWindow"
+        Title="QUANTBOT PRO - TERMINAL" Width="1380" Height="850"
+        Background="#0F172A"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Styles>
+        <Style Selector="Border.Card">
+            <Setter Property="Background" Value="#1E293B"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="BoxShadow" Value="0 4 6 0 #40000000"/>
+        </Style>
+
+        <Style Selector="Border.StratCard">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="Height" Value="85"/> 
+        </Style>
+
+        <Style Selector="TextBlock.Label">
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="LetterSpacing" Value="0.5"/>
+        </Style>
+        
+        <Style Selector="TextBlock.ValueText">
+            <Setter Property="Foreground" Value="#F8FAFC"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+
+        <Style Selector="TextBlock.SignalText">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
+
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#0F172A"/>
+            <Setter Property="BorderBrush" Value="#334155"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style Selector="Button.WinBtn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto, *" PointerPressed="OnWindowDrag">
+        
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Background="#1E293B" Height="42">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
+                <PathIcon Data="M13,2L3,14H12V22L22,10H13V2Z" Foreground="#38B2AC" Width="16" Height="16" Margin="0,0,8,0"/>
+                <TextBlock Text="QUANTBOT" Foreground="White" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Text=" PRO" Foreground="#38B2AC" FontWeight="Black" FontSize="14" VerticalAlignment="Center"/>
+                <Border Background="#2038B2AC" CornerRadius="4" Margin="12,0,0,0" Padding="8,2" VerticalAlignment="Center">
+                    <TextBlock Text="v2.3 STABLE" Foreground="#38B2AC" FontSize="10" FontWeight="Bold"/>
+                </Border>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button Classes="WinBtn" Content="─" Click="OnMinimize"/>
+                <Button Classes="WinBtn" Content="☐" Click="OnMaximize"/>
+                <Button Classes="WinBtn" Content="✕" Click="OnClose" Foreground="#EF4444"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="3.5*, 1.2*" Margin="20">
+            
+            <Grid Grid.Column="0" RowDefinitions="Auto, *, Auto" Margin="0,0,20,0">
+                
+                <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="0,0,0,20">
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
+                            <ComboBox Name="SymbolCombo" SelectedIndex="0" Width="140" Background="#0F172A" BorderBrush="#334155" CornerRadius="6">
+                                <ComboBoxItem>BTCUSDT</ComboBoxItem>
+                                <ComboBoxItem>ETHUSDT</ComboBoxItem>
+                                <ComboBoxItem>SOLUSDT</ComboBoxItem>
+                                <ComboBoxItem>XRPUSDT</ComboBoxItem>
+                                <ComboBoxItem>DOGEUSDT</ComboBoxItem>
+                                <ComboBoxItem>BNBUSDT</ComboBoxItem>
+                                <ComboBoxItem>ADAUSDT</ComboBoxItem>
+                                <ComboBoxItem>AVAXUSDT</ComboBoxItem>
+                            </ComboBox>
+                            <TextBlock Text="PERPETUAL" Classes="Label" Foreground="#64748B" FontSize="10" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="Auto, Auto">
+                            <TextBlock Name="PriceText" Grid.Column="0" Text="$0.00" Foreground="White" FontSize="42" FontWeight="Black" LetterSpacing="-1" VerticalAlignment="Bottom" Margin="0,0,20,0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Bottom" Margin="0,0,0,6">
+                                <TextBlock Text="BALANCE" Classes="Label" FontSize="10"/>
+                                <TextBlock Name="BalanceText" Text="$10,000" Foreground="#38B2AC" FontSize="18" FontWeight="Bold"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                    <Border Grid.Column="1" Background="#1E293B" CornerRadius="12" Padding="20,10" VerticalAlignment="Center" BorderBrush="#334155" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="AI SCORE" Classes="Label" HorizontalAlignment="Right" Margin="0,0,0,2"/>
+                            <TextBlock Name="FinalDecision" Text="WAITING" Foreground="#F59E0B" FontSize="24" FontWeight="Black" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Border Grid.Row="1" Classes="Card" Margin="0,0,0,20">
+                    <Grid RowDefinitions="Auto, *">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,*,*,*,*" Margin="0,0,0,10">
+                            <TextBlock Text="TREND (5)" Classes="Label" Foreground="#38B2AC" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="SMART MONEY (5)" Classes="Label" Foreground="#A855F7" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="QUANT (5)" Classes="Label" Foreground="#3B82F6" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="PATTERNS (5)" Classes="Label" Foreground="#FACC15" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="VOLATILITY (1)" Classes="Label" Foreground="#F97316" HorizontalAlignment="Center"/>
+                        </Grid>
+
+                        <UniformGrid Grid.Row="1" Rows="4" Columns="5">
+                            <Border Name="CardSuperTrend" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="SUPER TREND" Classes="Label"/><TextBlock Name="ValSuperTrend" Text="-" Classes="ValueText"/><TextBlock Name="SigSuperTrend" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardOrderBlock" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="ORDER BLOCK" Classes="Label"/><TextBlock Name="ValOrderBlock" Text="-" Classes="ValueText"/><TextBlock Name="SigOrderBlock" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardZScore" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="Z-SCORE" Classes="Label"/><TextBlock Name="ValZScore" Text="-" Classes="ValueText"/><TextBlock Name="SigZScore" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardInsideBar" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="INSIDE BAR" Classes="Label"/><TextBlock Name="ValInsideBar" Text="-" Classes="ValueText"/><TextBlock Name="SigInsideBar" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardAdx" Classes="StratCard" Margin="0,0,0,8"><Grid><TextBlock Text="ADX FILTER" Classes="Label"/><TextBlock Name="ValAdx" Text="-" Classes="ValueText"/><TextBlock Name="SigAdx" Text="-" Classes="SignalText"/></Grid></Border>
+
+                            <Border Name="CardIchimoku" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="ICHIMOKU" Classes="Label"/><TextBlock Name="ValIchimoku" Text="-" Classes="ValueText"/><TextBlock Name="SigIchimoku" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardFvg" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="FVG GAP" Classes="Label"/><TextBlock Name="ValFvg" Text="-" Classes="ValueText"/><TextBlock Name="SigFvg" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardHurst" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="HURST EXP" Classes="Label"/><TextBlock Name="ValHurst" Text="-" Classes="ValueText"/><TextBlock Name="SigHurst" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardFractal" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="FRACTAL" Classes="Label"/><TextBlock Name="ValFractal" Text="-" Classes="ValueText"/><TextBlock Name="SigFractal" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardPattern" Classes="StratCard" Margin="0,0,0,8"><Grid><TextBlock Text="CANDLE PAT" Classes="Label"/><TextBlock Name="ValPattern" Text="-" Classes="ValueText"/><TextBlock Name="SigPattern" Text="-" Classes="SignalText"/></Grid></Border>
+
+                            <Border Name="CardMa" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="MA CROSS" Classes="Label"/><TextBlock Name="ValMa" Text="-" Classes="ValueText"/><TextBlock Name="SigMa" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardVwap" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="VWAP REV" Classes="Label"/><TextBlock Name="ValVwap" Text="-" Classes="ValueText"/><TextBlock Name="SigVwap" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardEfficiency" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="EFFICIENCY" Classes="Label"/><TextBlock Name="ValEfficiency" Text="-" Classes="ValueText"/><TextBlock Name="SigEfficiency" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardRsiDiv" Classes="StratCard" Margin="0,0,8,8"><Grid><TextBlock Text="RSI DIV" Classes="Label"/><TextBlock Name="ValRsiDiv" Text="-" Classes="ValueText"/><TextBlock Name="SigRsiDiv" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardSqueeze" Classes="StratCard" Margin="0,0,0,8"><Grid><TextBlock Text="SQUEEZE" Classes="Label"/><TextBlock Name="ValSqueeze" Text="-" Classes="ValueText"/><TextBlock Name="SigSqueeze" Text="-" Classes="SignalText"/></Grid></Border>
+
+                            <Border Name="CardLinReg" Classes="StratCard" Margin="0,0,8,0"><Grid><TextBlock Text="LIN REG" Classes="Label"/><TextBlock Name="ValLinReg" Text="-" Classes="ValueText"/><TextBlock Name="SigLinReg" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardWhale" Classes="StratCard" Margin="0,0,8,0"><Grid><TextBlock Text="WHALE VOL" Classes="Label"/><TextBlock Name="ValWhale" Text="-" Classes="ValueText"/><TextBlock Name="SigWhale" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardVector" Classes="StratCard" Margin="0,0,8,0"><Grid><TextBlock Text="AI VECTOR" Classes="Label"/><TextBlock Name="ValVector" Text="-" Classes="ValueText"/><TextBlock Name="SigVector" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardDelta" Classes="StratCard" Margin="0,0,8,0"><Grid><TextBlock Text="DELTA DIV" Classes="Label"/><TextBlock Name="ValDelta" Text="-" Classes="ValueText"/><TextBlock Name="SigDelta" Text="-" Classes="SignalText"/></Grid></Border>
+                            <Border Name="CardSmartMoney" Classes="StratCard" Margin="0,0,0,0"><Grid><TextBlock Text="VOLUME" Classes="Label"/><TextBlock Name="ValSmartMoney" Text="-" Classes="ValueText"/><TextBlock Name="SigSmartMoney" Text="-" Classes="SignalText"/></Grid></Border>
+                        </UniformGrid>
+                    </Grid>
+                </Border>
+
+                <Grid Grid.Row="2">
+                    <TextBlock Text="SYSTEM LOGS" Classes="Label" Margin="0,0,0,8"/>
+                    <Border Classes="Card" Background="#0F172A" Padding="12" Height="180">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <TextBlock Name="LogText" Foreground="#22C55E" FontFamily="Consolas, monospace" FontSize="11" LineHeight="16" Text="> System Initialized..."/>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1" RowDefinitions="Auto, *">
+                <Border Grid.Row="0" Classes="Card" Margin="0,0,0,20">
+                    <StackPanel Spacing="15">
+                        <Grid>
+                            <TextBlock Text="MANUAL OVERRIDE" Classes="Label" VerticalAlignment="Center"/>
+                            <PathIcon Data="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12,12.5A1.5,1.5 0 0,1 10.5,11A1.5,1.5 0 0,1 12,9.5A1.5,1.5 0 0,1 13.5,11A1.5,1.5 0 0,1 12,12.5M12,7.2C9.9,7.2 8.2,8.9 8.2,11C8.2,14 12,17.5 12,17.5C12,17.5 15.8,14 15.8,11C15.8,8.9 14.1,7.2 12,7.2Z" 
+                                      Width="16" Height="16" Foreground="#64748B" HorizontalAlignment="Right"/>
+                        </Grid>
+                        
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="TIMEFRAME" VerticalAlignment="Center" Foreground="#64748B" FontSize="11" FontWeight="Bold"/>
+                            <ComboBox Name="TimeframeCombo" Grid.Column="1" SelectedIndex="2" Width="100">
+                                <ComboBoxItem>1m</ComboBoxItem><ComboBoxItem>5m</ComboBoxItem><ComboBoxItem>15m</ComboBoxItem>
+                                <ComboBoxItem>1h</ComboBoxItem><ComboBoxItem>4h</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                        <Grid ColumnDefinitions="*, Auto">
+                            <TextBlock Text="LEVERAGE" VerticalAlignment="Center" Foreground="#64748B" FontSize="11" FontWeight="Bold"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+                                <TextBlock Name="LevText" Text="10x" Foreground="#38B2AC" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <Slider Name="LevSlider" Width="100" Minimum="1" Maximum="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                            </StackPanel>
+                        </Grid>
+                        <Separator Background="#334155" Height="1" Margin="0,5"/>
+                        <StackPanel Spacing="10">
+                            <CheckBox Name="ManualTpSlCheck" Content="Auto TP/SL Protection" Foreground="#94A3B8" FontSize="11" IsChecked="True" IsEnabled="False"/>
+                            <Grid ColumnDefinitions="*, 10, *">
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="TAKE PROFIT %" Classes="Label" Foreground="#34D399" Margin="0,0,0,4"/>
+                                    <TextBox Name="TpInput" Text="AUTO" HorizontalContentAlignment="Center" IsReadOnly="True" Background="#0F172A" Foreground="#34D399"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="STOP LOSS %" Classes="Label" Foreground="#F87171" Margin="0,0,0,4"/>
+                                    <TextBox Name="SlInput" Text="AUTO" HorizontalContentAlignment="Center" IsReadOnly="True" Background="#0F172A" Foreground="#F87171"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Classes="Card" Background="#1E293B" BorderBrush="#38B2AC" BorderThickness="1">
+                    <Grid RowDefinitions="Auto, Auto, *">
+                        <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,20">
+                            <TextBlock Text="POSITION MONITOR" Classes="Label"/>
+                            <ComboBox Name="HistoryCombo" MaxDropDownHeight="300" PlaceholderText="Select History..." HorizontalAlignment="Stretch">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate x:DataType="local:TradeRecord">
+                                        <TextBlock Text="{Binding Title}" FontSize="11"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <Grid Grid.Row="1" ColumnDefinitions="*, Auto" Margin="0,0,0,20">
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Name="PosPnl" Text="$0.00" Foreground="#64748B" FontSize="32" FontWeight="Black"/>
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="ROE" Classes="Label"/>
+                                    <TextBlock Name="PosRoe" Text="0.00%" Foreground="#64748B" FontWeight="Bold"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <Border Grid.Column="1" Name="PosBadge" Background="#30334155" CornerRadius="4" Padding="8,4" VerticalAlignment="Top">
+                                <TextBlock Name="PosType" Text="NO POSITION" FontSize="11" FontWeight="Black" Foreground="#64748B"/>
+                            </Border>
+                        </Grid>
+                        <StackPanel Grid.Row="2" Spacing="15">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <StackPanel><TextBlock Text="ENTRY PRICE" Classes="Label"/><TextBlock Name="PosEntry" Text="-" Classes="Val"/></StackPanel>
+                                <StackPanel HorizontalAlignment="Right"><TextBlock Text="MARK / EXIT" Classes="Label" HorizontalAlignment="Right"/><TextBlock Name="PosMark" Text="-" Classes="Val" Foreground="#38B2AC" HorizontalAlignment="Right"/></StackPanel>
+                            </Grid>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <StackPanel><TextBlock Text="SIZE (USDT)" Classes="Label"/><TextBlock Name="PosSize" Text="-" Classes="Val" Foreground="#94A3B8"/></StackPanel>
+                                <StackPanel HorizontalAlignment="Right"><TextBlock Text="MARGIN" Classes="Label" HorizontalAlignment="Right"/><TextBlock Name="PosMargin" Text="-" Classes="Val" Foreground="#94A3B8" HorizontalAlignment="Right"/></StackPanel>
+                            </Grid>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <StackPanel><TextBlock Text="LIQUIDATION" Classes="Label" Foreground="#F87171"/><TextBlock Name="PosLiq" Text="-" Classes="Val" Foreground="#F87171"/></StackPanel>
+                                <StackPanel HorizontalAlignment="Right"><TextBlock Text="LEVERAGE" Classes="Label" HorizontalAlignment="Right"/><TextBlock Name="PosLev" Text="-" Classes="Val" HorizontalAlignment="Right"/></StackPanel>
+                            </Grid>
+                            <Separator Background="#334155" Height="1" Margin="0,5"/>
+                            <Grid ColumnDefinitions="*,*">
+                                <TextBlock Name="PosTp" Grid.Column="0" Text="TP: AUTO" Foreground="#34D399" FontSize="11" FontWeight="Bold" HorizontalAlignment="Left"/>
+                                <TextBlock Name="PosSl" Grid.Column="1" Text="SL: AUTO" Foreground="#F87171" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
