@@ -87,3 +87,14 @@
 /Users/memechan/Downloads/Dev/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.genruntimeconfig.cache
 /Users/memechan/Downloads/Dev/QuantDashboard/QuantDashboard/obj/Debug/net10.0/ref/QuantDashboard.dll
 /Users/memechan/Downloads/Dev/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.sourcelink.json
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.csproj.AssemblyReference.cache
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/Avalonia/Resources.Inputs.cache
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/Avalonia/resources
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.AssemblyInfoInputs.cache
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.AssemblyInfo.cs
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.csproj.CoreCompileInputs.cache
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.sourcelink.json
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.dll
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/refint/QuantDashboard.dll
+/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/Debug/net10.0/QuantDashboard.pdb

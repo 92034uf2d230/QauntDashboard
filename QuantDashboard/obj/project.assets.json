@@ -2142,19 +2142,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/memechan/.nuget/packages/": {}
+    "/home/runner/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/memechan/Downloads/Dev/QuantDashboard/QuantDashboard/QuantDashboard.csproj",
+      "projectUniqueName": "/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/QuantDashboard.csproj",
       "projectName": "QuantDashboard",
-      "projectPath": "/Users/memechan/Downloads/Dev/QuantDashboard/QuantDashboard/QuantDashboard.csproj",
-      "packagesPath": "/Users/memechan/.nuget/packages/",
-      "outputPath": "/Users/memechan/Downloads/Dev/QuantDashboard/QuantDashboard/obj/",
+      "projectPath": "/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/QuantDashboard.csproj",
+      "packagesPath": "/home/runner/.nuget/packages/",
+      "outputPath": "/home/runner/work/QuantDashboard/QuantDashboard/QuantDashboard/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/memechan/.nuget/NuGet/NuGet.Config"
+        "/home/runner/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -2225,7 +2225,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/memechan/.dotnet/sdk/10.0.100/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/10.0.100/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.CSharp": "(,4.7.32767]",
           "Microsoft.VisualBasic": "(,10.4.32767]",
