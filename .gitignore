@@ -1,0 +1,51 @@
+# Build results
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results of an ideaional IDE plugin
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.ide/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# JetBrains Rider
+.idea/
+
+# Mac
+.DS_Store
+
+# Logs
+*.log
+backtest_logs/
+backtest_results/
+
+# Rider cache/options directory
+.idea
+
+# User specific files
+*.rsuser
+
+# Mono auto generated files
+mono_crash.*
+
+# Windows Presentation Foundation font cache
+FontCache/
+
+# Visual Studio temp files and build results
+[Tt]humbs.db
+*.cache
+~$*

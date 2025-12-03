@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="using:QuantDashboard"
+        xmlns:models="using:QuantDashboard.Models"
         x:Class="QuantDashboard.MainWindow"
         Title="QUANTBOT PRO - TERMINAL" Width="1380" Height="850"
         Background="#0F172A"
@@ -219,7 +220,7 @@
                             <TextBlock Text="POSITION MONITOR" Classes="Label"/>
                             <ComboBox Name="HistoryCombo" MaxDropDownHeight="300" PlaceholderText="Select History..." HorizontalAlignment="Stretch">
                                 <ComboBox.ItemTemplate>
-                                    <DataTemplate x:DataType="local:TradeRecord">
+                                    <DataTemplate x:DataType="models:TradeRecord">
                                         <TextBlock Text="{Binding Title}" FontSize="11"/>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
