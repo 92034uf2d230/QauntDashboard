@@ -1,0 +1,24 @@
+{
+  "Mode": "UI",
+  "BacktestSettings": {
+    "Enabled": false,
+    "Symbol": "BTCUSDT",
+    "Interval": "5m",
+    "StartBalance": 10000,
+    "Leverage": 10,
+    "DataSource": "data/futures/BTCUSDT_5m.csv",
+    "OutputPath": ""
+  },
+  "TradingSettings": {
+    "InitialBalance": 10000,
+    "DefaultLeverage": 10,
+    "DefaultInterval": "5m",
+    "DefaultSymbol": "BTCUSDT",
+    "PaperTrading": true,
+    "RealTradingEnabled": false
+  },
+  "UISettings": {
+    "ShowWindow": true,
+    "AutoStart": true
+  }
+}

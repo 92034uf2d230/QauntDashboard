@@ -1,24 +1,30 @@
 using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
+using Avalonia.Controls. ApplicationLifetimes;
+using Avalonia. Markup.Xaml;
+using QuantDashboard. Managers;
 
-namespace QuantDashboard;
-
-public partial class App : Application
+namespace QuantDashboard
 {
-    public override void Initialize()
+    public partial class App : Application
     {
-        AvaloniaXamlLoader.Load(this);
-    }
-
-    public override void OnFrameworkInitializationCompleted()
-    {
-        // 데스크탑 모드로 실행될 때 MainWindow를 띄운다
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        public override void Initialize()
         {
-            desktop.MainWindow = new MainWindow();
+            AvaloniaXamlLoader.Load(this);
         }
 
-        base.OnFrameworkInitializationCompleted();
+        public override void OnFrameworkInitializationCompleted()
+        {
+            var settings = SettingsManager.Instance. CurrentSettings;
+
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                if (settings.UISettings.ShowWindow)
+                {
+                    desktop.MainWindow = new MainWindow();
+                }
+            }
+
+            base.OnFrameworkInitializationCompleted();
+        }
     }
 }

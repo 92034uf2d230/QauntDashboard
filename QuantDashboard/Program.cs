@@ -1,30 +1,111 @@
 ﻿using System;
 using System.IO;
-using QuantDashboard.Engine.Data;
-using QuantDashboard.Enums;
-using QuantDashboard.Strategies;
+using Avalonia;
+using QuantDashboard.Engine. Data;
+using QuantDashboard. Enums;
+using QuantDashboard.Managers;
+using QuantDashboard. Strategies;
 
 namespace QuantDashboard
 {
     internal class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        public static void Main(string[] args)
         {
-            // 현재 실행 파일 위치 기준으로 솔루션 루트 찾기
-            // (예: QuantDashboard/bin/Debug/net10.0/ → ../../../.. → 솔루션 루트)
-            var baseDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
-            Console.WriteLine(baseDir);
+            var settings = SettingsManager.Instance. Load();
 
-            // data/futures 경로
+            switch (settings.Mode. ToUpper())
+            {
+                case "BACKTEST":
+                    RunBacktestMode(settings);
+                    break;
+                case "CONSOLE":
+                    RunConsoleMode(settings);
+                    break;
+                case "UI":
+                default:
+                    RunUIMode(args);
+                    break;
+            }
+        }
+
+        private static void RunBacktestMode(Models.AppSettings settings)
+        {
+            Console.WriteLine("==============================================");
+            Console.WriteLine("     BACKTEST MODE - AUTOMATED RUN");
+            Console.WriteLine("==============================================");
+
+            if (! settings.BacktestSettings. Enabled)
+            {
+                Console.WriteLine("[ERROR] Backtest is disabled in settings. json");
+                Console.WriteLine("Set 'BacktestSettings. Enabled' to true");
+                Console.ReadLine();
+                return;
+            }
+
+            Console.WriteLine($"Symbol: {settings.BacktestSettings.Symbol}");
+            Console. WriteLine($"Interval: {settings.BacktestSettings.Interval}");
+            Console.WriteLine($"Start Balance: ${settings.BacktestSettings.StartBalance}");
+            Console.WriteLine($"Leverage: {settings.BacktestSettings.Leverage}x");
+            Console.WriteLine("==============================================\n");
+
+            Console.WriteLine("Starting backtest...\n");
+
+            try
+            {
+                var backtester = new BacktestManager();
+                var interval = ParseInterval(settings.BacktestSettings.Interval);
+
+                var result = backtester.RunBacktestAsync(
+                    settings. BacktestSettings.Symbol,
+                    interval,
+                    settings.BacktestSettings.StartBalance,
+                    settings.BacktestSettings. Leverage
+                ). Result;
+
+                Console.WriteLine("\n==============================================");
+                Console.WriteLine("          BACKTEST RESULTS");
+                Console.WriteLine("==============================================");
+                Console.WriteLine($"Final Balance: ${result.FinalBalance:N0}");
+                Console.WriteLine($"Total PnL: {result.TotalPnL:+0;-0} ({result.TotalPnL / settings.BacktestSettings.StartBalance * 100:F1}%)");
+                Console.WriteLine($"Win/Loss: {result.WinCount}W / {result.LossCount}L");
+                Console.WriteLine($"Max Drawdown: -{result.MaxDrawdown:F2}%");
+                Console.WriteLine("==============================================");
+
+                string outputPath = settings.BacktestSettings.OutputPath;
+                if (string.IsNullOrEmpty(outputPath))
+                {
+                    string desktop = Environment.GetFolderPath(Environment.SpecialFolder. Desktop);
+                    outputPath = Path.Combine(desktop, $"backtest_{settings.BacktestSettings.Symbol}_{DateTime.Now:yyyyMMdd_HHmmss}.txt");
+                }
+
+                File.WriteAllText(outputPath, result.Log);
+                Console.WriteLine($"\nReport saved: {outputPath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\n[ERROR] Backtest failed: {ex.Message}");
+            }
+
+            Console.WriteLine("\nPress any key to exit...");
+            Console.ReadLine();
+        }
+
+        private static void RunConsoleMode(Models. AppSettings settings)
+        {
+            Console.WriteLine("==============================================");
+            Console.WriteLine("  CONSOLE MODE - PATTERN MATCHING TEST");
+            Console.WriteLine("==============================================");
+
+            var baseDir = Path.GetFullPath(Path. Combine(AppContext.BaseDirectory, "..", "..", "..", ".. "));
             var dataDir = Path.Combine(baseDir, "data", "futures");
+            var filePath = Path.Combine(dataDir, $"{settings.TradingSettings.DefaultSymbol}_15m.csv");
 
-            // 테스트용으로 BTCUSDT 15m 사용
-            var filePath = Path.Combine(dataDir, "BTCUSDT_15m.csv");
-
-            if (!File.Exists(filePath))
+            if (! File.Exists(filePath))
             {
                 Console.WriteLine($"CSV not found: {filePath}");
-                Console.WriteLine("download_futures_klines.py 돌려서 data/futures 안에 CSV부터 만들어줘.");
+                Console.WriteLine("Run download_futures_klines.py first.");
                 Console.ReadLine();
                 return;
             }
@@ -35,35 +116,55 @@ namespace QuantDashboard
 
             if (candles.Count < 100)
             {
-                Console.WriteLine("Not enough candles.");
+                Console. WriteLine("Not enough candles.");
                 Console.ReadLine();
                 return;
             }
 
-            // 전체 과거를 히스토리로 사용해서 패턴 매칭 전략 생성
-            // k: 유사 패턴 개수, threshold: 기대 로그 수익률 임계값
             var strategy = new PatternMatchingStrategy(
                 historicalCandles: candles,
                 k: 20,
-                threshold: 0.001 // ~0.1% 이상 상승/하락일 때만 방향성
+                threshold: 0.001
             );
 
-            // 최근 N개 캔들을 "현재까지의 흐름"으로 사용 (예: 300개)
             int recentWindow = Math.Min(300, candles.Count);
             var recentCandles = candles.GetRange(candles.Count - recentWindow, recentWindow);
 
-            // 전략에 현재 상태 넣고 신호 받아오기
-            TradingSignal signal = strategy.Decide(recentCandles);
+            TradingSignal signal = strategy. Decide(recentCandles);
 
             var lastCandle = candles[^1];
-            Console.WriteLine($"Last candle timestamp : {lastCandle.Timestamp:yyyy-MM-dd HH:mm}");
+            Console.WriteLine($"\nLast candle: {lastCandle. Timestamp:yyyy-MM-dd HH:mm}");
             Console.WriteLine($"Open={lastCandle.Open}, High={lastCandle.High}, Low={lastCandle.Low}, Close={lastCandle.Close}");
             Console.WriteLine($"Volume={lastCandle.Volume}, Trades={lastCandle.TradeCount}");
+            Console.WriteLine($"\nPatternMatchingStrategy signal: {signal}\n");
 
-            Console.WriteLine($"PatternMatchingStrategy signal: {signal}  (Hold/Buy/Sell)");
-
-            Console.WriteLine("Done.");
+            Console.WriteLine("Press any key to exit...");
             Console.ReadLine();
+        }
+
+        private static void RunUIMode(string[] args)
+        {
+            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        }
+
+        public static AppBuilder BuildAvaloniaApp()
+            => AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .WithInterFont()
+                .LogToTrace();
+
+        private static Binance.Net.Enums.KlineInterval ParseInterval(string interval)
+        {
+            return interval. ToLower() switch
+            {
+                "1m" => Binance.Net.Enums.KlineInterval.OneMinute,
+                "5m" => Binance.Net.Enums.KlineInterval.FiveMinutes,
+                "15m" => Binance.Net.Enums.KlineInterval.FifteenMinutes,
+                "1h" => Binance.Net.Enums.KlineInterval.OneHour,
+                "4h" => Binance.Net.Enums.KlineInterval.FourHour,
+                "1d" => Binance.Net.Enums.KlineInterval.OneDay,
+                _ => Binance.Net. Enums.KlineInterval.FiveMinutes
+            };
         }
     }
 }
