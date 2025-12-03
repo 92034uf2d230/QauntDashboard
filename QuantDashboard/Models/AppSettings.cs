@@ -53,6 +53,11 @@ namespace QuantDashboard.Models
     public class AppSettings
     {
         /// <summary>
+        /// Maximum allowed leverage (based on exchange limits)
+        /// </summary>
+        public const decimal MaxLeverage = 125m;
+
+        /// <summary>
         /// Application mode: "Console", "UI", or "Backtest"
         /// </summary>
         public string Mode { get; set; } = "UI";
@@ -123,9 +128,9 @@ namespace QuantDashboard.Models
                 return false;
             }
 
-            if (BacktestSettings.Leverage <= 0 || BacktestSettings.Leverage > 125)
+            if (BacktestSettings.Leverage <= 0 || BacktestSettings.Leverage > MaxLeverage)
             {
-                errorMessage = "BacktestSettings.Leverage must be between 1 and 125";
+                errorMessage = $"BacktestSettings.Leverage must be between 1 and {MaxLeverage}";
                 return false;
             }
 
@@ -136,9 +141,9 @@ namespace QuantDashboard.Models
                 return false;
             }
 
-            if (TradingSettings.DefaultLeverage <= 0 || TradingSettings.DefaultLeverage > 125)
+            if (TradingSettings.DefaultLeverage <= 0 || TradingSettings.DefaultLeverage > MaxLeverage)
             {
-                errorMessage = "TradingSettings.DefaultLeverage must be between 1 and 125";
+                errorMessage = $"TradingSettings.DefaultLeverage must be between 1 and {MaxLeverage}";
                 return false;
             }
 

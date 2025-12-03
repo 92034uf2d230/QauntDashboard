@@ -36,10 +36,71 @@ namespace QuantDashboard.Managers
 
         private SettingsManager()
         {
-            // Determine settings path relative to executable location
-            var baseDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
-            _settingsPath = Path.Combine(baseDir, "settings.json");
+            // Find settings file using multiple strategies
+            _settingsPath = FindSettingsPath();
             _currentSettings = AppSettings.CreateDefault();
+        }
+
+        /// <summary>
+        /// Find settings.json path using multiple strategies:
+        /// 1. Environment variable QUANT_SETTINGS_PATH
+        /// 2. Current working directory
+        /// 3. Executable directory
+        /// 4. Search parent directories from executable location
+        /// </summary>
+        private static string FindSettingsPath()
+        {
+            const string settingsFileName = "settings.json";
+
+            // Strategy 1: Check environment variable
+            var envPath = Environment.GetEnvironmentVariable("QUANT_SETTINGS_PATH");
+            if (!string.IsNullOrEmpty(envPath) && File.Exists(envPath))
+            {
+                return envPath;
+            }
+
+            // Strategy 2: Check current working directory
+            var cwdPath = Path.Combine(Directory.GetCurrentDirectory(), settingsFileName);
+            if (File.Exists(cwdPath))
+            {
+                return cwdPath;
+            }
+
+            // Strategy 3: Check executable directory
+            var exePath = Path.Combine(AppContext.BaseDirectory, settingsFileName);
+            if (File.Exists(exePath))
+            {
+                return exePath;
+            }
+
+            // Strategy 4: Search parent directories (up to 5 levels) for project root
+            var searchDir = AppContext.BaseDirectory;
+            for (int i = 0; i < 5; i++)
+            {
+                var parent = Directory.GetParent(searchDir);
+                if (parent == null) break;
+
+                var candidatePath = Path.Combine(parent.FullName, settingsFileName);
+                if (File.Exists(candidatePath))
+                {
+                    return candidatePath;
+                }
+
+                // Also check if this looks like a project root (has .sln or .csproj)
+                if (Directory.GetFiles(parent.FullName, "*.sln").Length > 0 ||
+                    Directory.GetFiles(parent.FullName, "*.csproj").Length > 0)
+                {
+                    // Return this path even if settings.json doesn't exist yet
+                    return candidatePath;
+                }
+
+                searchDir = parent.FullName;
+            }
+
+            // Default: create in project root relative to executable
+            // This handles typical development layout: bin/Debug/net10.0/
+            var defaultBaseDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", ".."));
+            return Path.Combine(defaultBaseDir, settingsFileName);
         }
 
         /// <summary>

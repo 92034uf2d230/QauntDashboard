@@ -31,6 +31,7 @@ artifacts/
 # Logs
 *.log
 backtest_logs/
+backtest_results/
 
 # Rider cache/options directory
 .idea

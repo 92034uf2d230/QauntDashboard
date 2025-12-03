@@ -1,1 +1,0 @@
-Not enough data (Need > 200 candles)
